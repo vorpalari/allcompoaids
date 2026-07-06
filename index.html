@@ -38,9 +38,11 @@ body{font-family:'Nunito',sans-serif;min-height:100vh;padding:24px 16px 48px;col
 .chip-coral{background:#fde8e0;color:#a83a00;border-color:#f9c4aa;}
 .chip-pink{background:#ffe0ef;color:#8a0040;border-color:#ffb3d1;}
 .chip-slate{background:#e8eaf0;color:#3a4060;border-color:#c8ccdc;}
-.phrase-list{list-style:none;display:flex;flex-direction:column;gap:7px;}
-.phrase-list li{display:flex;align-items:flex-start;gap:9px;font-size:14px;font-weight:600;line-height:1.5;padding:7px 12px;border-radius:10px;cursor:pointer;transition:opacity .15s;}
+.phrase-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.phrase-list li{display:flex;align-items:flex-start;gap:9px;padding:9px 12px;border-radius:10px;cursor:pointer;transition:opacity .15s;}
 .phrase-list li.used{opacity:.4;outline:2px solid #555;border-radius:10px;}
+.phrase-main{font-size:15px;font-weight:800;line-height:1.4;}
+.phrase-example{font-size:12px;font-weight:600;line-height:1.4;color:#666;margin-top:3px;font-style:italic;}
 .conj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px;}
 .conj-card{background:linear-gradient(135deg,#fff3cc,#fce788);border-radius:12px;padding:10px 12px;text-align:center;font-weight:800;font-size:13px;color:#7a5000;border:2px solid #f5c800;box-shadow:0 3px 0 #d4aa00;cursor:pointer;transition:opacity .15s;}
 .conj-card.used{opacity:.4;outline:2px solid #555;box-shadow:none;}
@@ -125,6 +127,19 @@ body{font-family:'Nunito',sans-serif;min-height:100vh;padding:24px 16px 48px;col
 .planner-textarea:disabled{background:#f7f7f7;color:#888;}
 .planner-done-btn{display:flex;align-items:center;gap:5px;border-radius:20px;padding:5px 12px;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;cursor:pointer;border:2px solid #ccc;background:white;color:#888;white-space:nowrap;-webkit-appearance:none;appearance:none;}
 .planner-done-btn.marked{background:#43aa8b;border-color:#43aa8b;color:white;}
+.snt-practice{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:4px;}
+@media(max-width:640px){.snt-practice{grid-template-columns:1fr;}}
+.snt-col{border-radius:14px;padding:12px 14px;}
+.snt-col-basic{background:#fde8e0;border:2px solid #f9c4aa;}
+.snt-col-helpers{background:#fff3cc;border:2px solid #f5d87a;}
+.snt-col-yours{background:#d4f5ea;border:2px solid #a8e6d0;}
+.snt-col-label{font-family:'Fredoka One',sans-serif;font-size:12px;letter-spacing:.5px;margin-bottom:8px;}
+.snt-col-basic .snt-col-label{color:#a83a00;}
+.snt-col-helpers .snt-col-label{color:#8a5e00;}
+.snt-col-yours .snt-col-label{color:#1a7a5b;}
+.snt-basic-text{font-size:14px;font-weight:700;color:#2a2a3e;line-height:1.6;}
+.snt-helper-chip{display:inline-block;background:white;border:1.5px solid #f0d890;border-radius:20px;padding:4px 11px;font-size:12.5px;font-weight:700;color:#7a5000;margin:0 5px 6px 0;}
+.snt-yours-area{width:100%;min-height:80px;border-radius:10px;border:1.5px solid #a8e6d0;background:white;padding:8px 10px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:600;color:#2a2a3e;resize:vertical;-webkit-appearance:none;appearance:none;}
 </style>
 </head>
 <body>
@@ -205,12 +220,11 @@ body{font-family:'Nunito',sans-serif;min-height:100vh;padding:24px 16px 48px;col
     <div class="card-icon" style="background:#ffd99a;">&#127917;</div>
     <div class="card-title">Show, Don't Tell!</div>
   </div>
-  <p style="font-size:13.5px;font-weight:700;color:#7a5000;margin-bottom:12px;" id="snt-level-tip">Pick a level above to see how Show Not Tell works for that level.</p>
-  <div class="snt-row" id="snt-examples">
-    <div class="snt-box snt-tell"><div class="snt-label">&#10060; TELL</div><p>She was happy. She felt excited.</p></div>
-    <div class="snt-box snt-show"><div class="snt-label">&#10003; SHOW</div><p>She was over the moon. A wide grin spread across her face and her eyes sparkled with joy.</p></div>
+  <div class="snt-practice" id="snt-examples">
+    <div class="snt-col snt-col-basic"><div class="snt-col-label">BASIC SENTENCE</div><p class="snt-basic-text" id="snt-basic-text">She was happy. She felt excited.</p></div>
+    <div class="snt-col snt-col-helpers"><div class="snt-col-label">HELPING WORDS &amp; PHRASES</div><div id="snt-helper-chips"></div></div>
+    <div class="snt-col snt-col-yours"><div class="snt-col-label">NOW YOU TRY!</div><textarea class="snt-yours-area" id="snt-yours-area" placeholder="Combine the basic sentence with the helping words to write a longer, more descriptive sentence."></textarea></div>
   </div>
-  <div class="snt-tip" id="snt-tip">&#128161; Pick a theme above to see a Show Not Tell example.</div>
 </div>
 
 <div class="card compo-card" id="compo-card" style="border:2px solid #dde8ff;">
@@ -319,10 +333,10 @@ var THEMES_P3 = {
     sntShow:'The old man stood by the road with shaking hands. He looked left and right with wide, worried eyes.',
     sntTip:'&#128161; Show the person in need looking lost or upset before the helper arrives. It makes the kindness feel more special.',
     topics:[
-      {id:'k1',emoji:'&#128116;',label:'Helping an Elderly Person'},
-      {id:'k2',emoji:'&#128101;',label:'Standing Up for a Friend'},
-      {id:'k3',emoji:'&#128054;',label:'Helping an Injured Animal'},
-      {id:'k4',emoji:'&#127968;',label:'Helping a Neighbour'}
+      {id:'k1',emoji:'&#128116;',label:'Helping an Elderly Person',phrases:[['&#10024;','Without a second thought','Priya ran over to help without a second thought.'],['&#127775;','A warm feeling spread through her chest','A warm feeling spread through her chest as she watched the old man smile.'],['&#128150;','Her heart went out to','Her heart went out to the frightened kitten straight away.'],['&#128171;','Stepped forward before anyone else did','Priya stepped forward before anyone else did.'],['&#127752;','Offered a hand without being asked','Priya offered a hand without being asked.']]},
+      {id:'k2',emoji:'&#128101;',label:'Standing Up for a Friend',phrases:[['&#10024;','A small act of kindness','It was only a small act of kindness, but it meant everything.'],['&#127775;','Could not walk away and do nothing','She knew she could not walk away and do nothing.'],['&#128150;','A knot of worry in her chest','Lily felt a knot of worry in her chest.'],['&#128171;','Smiled warmly','Lily smiled warmly and said it was no trouble at all.'],['&#127752;','Tears of gratitude','Tears of gratitude welled up in the old man\'s eyes.']]},
+      {id:'k3',emoji:'&#128054;',label:'Helping an Injured Animal',phrases:[['&#10024;','Without hesitation','Sofia reached out without hesitation.'],['&#127775;','A helping hand','Sofia was always ready to lend a helping hand.'],['&#128150;','Eyes filled with relief','Her eyes filled with relief the moment help arrived.'],['&#128171;','A gentle touch on the shoulder','Sofia gave a gentle touch on the shoulder to comfort her friend.'],['&#127752;','Went out of her way','Sofia went out of her way to make sure the old man got home safely.']]},
+      {id:'k4',emoji:'&#127968;',label:'Helping a Neighbour',phrases:[['&#10024;','A quiet act of courage','Standing up for a friend can be a quiet act of courage.'],['&#127775;','No trouble at all','"It was no trouble at all," he said with a smile.'],['&#128150;','A caring word','Sometimes a caring word is all someone needs.'],['&#128171;','Reached out a hand','Ethan reached out a hand to help his friend up.'],['&#127752;','Proud of doing the right thing','Ethan felt proud of doing the right thing.']]}
     ],
     compos:{
       k1:{title:'&#128116; Helping an Elderly Person',introType:'setting',paras:[
@@ -385,10 +399,10 @@ var THEMES_P3 = {
     sntShow:'Mia stood completely still for a moment. Then a wide grin spread across her face and she let out a squeal of pure joy.',
     sntTip:'&#128161; Show the moment just before the character reacts. That one second of stillness makes the joy feel very real.',
     topics:[
-      {id:'h1',emoji:'&#127942;',label:'Winning a Competition'},
-      {id:'h2',emoji:'&#127873;',label:'Getting a Surprise Gift'},
-      {id:'h3',emoji:'&#128218;',label:'Doing Well in a Test'},
-      {id:'h4',emoji:'&#127882;',label:'A Fun Day With Family'}
+      {id:'h1',emoji:'&#127942;',label:'Winning a Competition',phrases:[['&#10024;','Over the moon','Kai was over the moon when he heard the news.'],['&#127775;','A wide grin spread across his face','A wide grin spread across his face.'],['&#128150;','Could hardly contain his excitement','Kai could hardly contain his excitement.'],['&#128171;','Jumped for joy','Kai jumped for joy at the good news.'],['&#127752;','Eyes lit up','His eyes lit up the moment he saw it.']]},
+      {id:'h2',emoji:'&#127873;',label:'Getting a Surprise Gift',phrases:[['&#10024;','A squeal of delight','Siti let out a squeal of delight.'],['&#127775;','Buzzing with excitement','Siti walked home still buzzing with excitement.'],['&#128150;','Could not stop smiling','Siti could not stop smiling all afternoon.'],['&#128171;','Punched the air','Siti punched the air in triumph.'],['&#127752;','On cloud nine','Siti felt as though she were on cloud nine.']]},
+      {id:'h3',emoji:'&#128218;',label:'Doing Well in a Test',phrases:[['&#10024;','Burst into cheers','The whole class burst into cheers.'],['&#127775;','A proud grin','Ling wore a proud grin for the rest of the day.'],['&#128150;','Danced around the room','Ling nearly danced around the room with joy.'],['&#128171;','Beamed from ear to ear','Ling beamed from ear to ear.'],['&#127752;','Her heart soared','Her heart soared at the good news.']]},
+      {id:'h4',emoji:'&#127882;',label:'A Fun Day With Family',phrases:[['&#10024;','Could hardly believe his luck','Tom could hardly believe his luck.'],['&#127775;','Felt like hugging everyone in sight','Tom felt like hugging everyone in sight.'],['&#128150;','A happy blur','The rest of the day passed in a happy blur.'],['&#128171;','Skipped all the way home','Tom skipped all the way home.'],['&#127752;','The best day ever','Tom decided it was the best day he had ever had.']]}
     ],
     compos:{
       h1:{title:'&#127942; Winning a Competition',introType:'setting',paras:[
@@ -451,10 +465,10 @@ var THEMES_P3 = {
     sntShow:'Tom walked back to his seat very slowly. His shoulders drooped and he stared at the table without saying a single word for the rest of the morning.',
     sntTip:'&#128161; Show disappointment through what the body does. Walking slowly, going quiet, staring at the table. This tells the reader far more than just saying "he was sad".',
     topics:[
-      {id:'s1',emoji:'&#9917;',label:'Losing a Competition'},
-      {id:'s2',emoji:'&#127873;',label:'A Trip Getting Cancelled'},
-      {id:'s3',emoji:'&#128220;',label:'Getting a Bad Mark'},
-      {id:'s4',emoji:'&#128377;',label:'Not Being Chosen for a Team'}
+      {id:'s1',emoji:'&#9917;',label:'Losing a Competition',phrases:[['&#10024;','Her shoulders drooped','Her shoulders drooped as she walked away.'],['&#127775;','Stared blankly at the floor','Priya stared blankly at the floor.'],['&#128150;','A heavy feeling in her chest','Priya felt a heavy feeling in her chest.'],['&#128171;','Blinked back tears','Priya blinked back tears.'],['&#127752;','Could not find the words','Priya could not find the words to say.']]},
+      {id:'s2',emoji:'&#127873;',label:'A Trip Getting Cancelled',phrases:[['&#10024;','A lump in his throat','Ethan felt a lump in his throat.'],['&#127775;','Went quiet for the rest of the day','Ethan went quiet for the rest of the day.'],['&#128150;','His heart sank','His heart sank the moment he heard the news.'],['&#128171;','Trudged back to his seat','Ethan trudged back to his seat.'],['&#127752;','Did not want to talk to anyone','Ethan felt sad and did not want to talk to anyone.']]},
+      {id:'s3',emoji:'&#128220;',label:'Getting a Bad Mark',phrases:[['&#10024;','Stared at the ground','Ling stared at the ground, unable to look up.'],['&#127775;','A wave of disappointment','A wave of disappointment washed over Ling.'],['&#128150;','Could not hide her disappointment','Ling could not hide her disappointment.'],['&#128171;','Wiped her eyes','Ling wiped her eyes and took a deep breath.'],['&#127752;','Swallowed hard','Ling swallowed hard, trying not to cry.']]},
+      {id:'s4',emoji:'&#128377;',label:'Not Being Chosen for a Team',phrases:[['&#10024;','A slow, sad sigh','Ahmad let out a slow, sad sigh.'],['&#127775;','Could barely look up','Ahmad could barely look up at his classmates.'],['&#128150;','Sat quietly by himself','Ahmad sat quietly by himself during recess.'],['&#128171;','Did not have the heart to','Ahmad did not have the heart to tell anyone.'],['&#127752;','Picked himself back up','Ahmad picked himself back up and tried again.']]}
     ],
     compos:{
       s1:{title:'&#9917; Losing a Competition',introType:'setting',paras:[
@@ -518,10 +532,10 @@ var THEMES_P3 = {
     sntShow:'Sam stared at his worksheet but could not read a single word. His hands felt cold and he kept glancing at the classroom door, dreading the moment someone would find out.',
     sntTip:'&#128161; Show guilt by what the character cannot do. They cannot focus, cannot eat, cannot stop thinking about it. That restlessness tells the reader everything.',
     topics:[
-      {id:'m1',emoji:'&#128245;',label:'Being Dishonest to Avoid Trouble'},
-      {id:'m2',emoji:'&#129695;',label:'Breaking Something and Hiding It'},
-      {id:'m3',emoji:'&#128126;',label:'A Prank That Went Wrong'},
-      {id:'m4',emoji:'&#128245;',label:'Using Something Without Permission'}
+      {id:'m1',emoji:'&#128245;',label:'Being Dishonest to Avoid Trouble',phrases:[['&#10024;','Froze on the spot','Sam froze on the spot the moment it happened.'],['&#127775;','A guilty knot in his stomach','Sam felt a guilty knot in his stomach.'],['&#128150;','Hoped nobody would notice','Sam hoped nobody would notice.'],['&#128171;','Could not meet his classmate\'s eyes','Sam could not meet his classmate\'s eyes.'],['&#127752;','A heavy weight of guilt','A heavy weight of guilt sat on his chest.']]},
+      {id:'m2',emoji:'&#129695;',label:'Breaking Something and Hiding It',phrases:[['&#10024;','His face turned red with embarrassment','His face turned red with embarrassment.'],['&#127775;','The truth slipped out','In the end, the truth slipped out.'],['&#128150;','Took a deep breath and confessed','Ali took a deep breath and confessed.'],['&#128171;','Could not stop thinking about it','Ali could not stop thinking about it all day.'],['&#127752;','A wave of relief','A wave of relief washed over Ali once he told the truth.']]},
+      {id:'m3',emoji:'&#128126;',label:'A Prank That Went Wrong',phrases:[['&#10024;','Kept glancing nervously','Tom kept glancing nervously at the door.'],['&#127775;','Swept it under the sofa','Tom swept the pieces under the sofa without a word.'],['&#128150;','A nervous flutter','Tom felt a nervous flutter in his chest.'],['&#128171;','Owned up to the mistake','Tom finally owned up to the mistake.'],['&#127752;','The guilt was worse than the truth','Tom realised the guilt was worse than the truth.']]},
+      {id:'m4',emoji:'&#128245;',label:'Using Something Without Permission',phrases:[['&#10024;','Her hands felt cold','Her hands felt cold every time she thought about it.'],['&#127775;','Avoided her classmate all day','Sara avoided her classmate for the rest of the day.'],['&#128150;','A small, guilty voice','A small, guilty voice inside Sara would not stay quiet.'],['&#128171;','Braced herself for trouble','Sara braced herself for trouble.'],['&#127752;','Felt lighter after telling the truth','Sara felt lighter after telling the truth.']]}
     ],
     compos:{
       m1:{title:'&#128245; Being Dishonest to Avoid Trouble',introType:'dialogue',paras:[
@@ -586,10 +600,10 @@ var THEMES_P4 = {
     sntShow:'The old man stood by the roadside, his hands trembling. He looked left and right anxiously, unsure when it would be safe to cross.',
     sntTip:'&#128161; Show the person in need through small details, shaking hands, worried glances, before the helper steps in.',
     topics:[
-      {id:'p4k1',emoji:'&#128104;&#8205;&#128298;',label:'Helping a Lost Stranger'},
-      {id:'p4k2',emoji:'&#128101;',label:'Standing Up for a Classmate'},
-      {id:'p4k3',emoji:'&#128054;',label:'Caring for an Injured Animal'},
-      {id:'p4k4',emoji:'&#128104;&#8205;&#128121;',label:'Helping a New Student'}
+      {id:'p4k1',emoji:'&#128104;&#8205;&#128298;',label:'Helping a Lost Stranger',phrases:[['&#10024;','Without a second thought','Ryan ran over to help without a second thought.'],['&#127775;','A warm feeling spread through his chest','A warm feeling spread through his chest as he watched the old man smile.'],['&#128150;','His heart went out to','His heart went out to the frightened kitten straight away.'],['&#128171;','Stepped forward before anyone else did','Ryan stepped forward before anyone else did.'],['&#127752;','Offered a hand without being asked','Ryan offered a hand without being asked.']]},
+      {id:'p4k2',emoji:'&#128101;',label:'Standing Up for a Classmate',phrases:[['&#10024;','A small act of kindness','It was only a small act of kindness, but it meant everything.'],['&#127775;','Could not walk away and do nothing','She knew she could not walk away and do nothing.'],['&#128150;','A knot of worry in her chest','Hui Min felt a knot of worry in her chest.'],['&#128171;','Smiled warmly','Hui Min smiled warmly and said it was no trouble at all.'],['&#127752;','Tears of gratitude','Tears of gratitude welled up in the old man\'s eyes.']]},
+      {id:'p4k3',emoji:'&#128054;',label:'Caring for an Injured Animal',phrases:[['&#10024;','Without hesitation','Farah reached out without hesitation.'],['&#127775;','A helping hand','Farah was always ready to lend a helping hand.'],['&#128150;','Eyes filled with relief','Her eyes filled with relief the moment help arrived.'],['&#128171;','A gentle touch on the shoulder','Farah gave a gentle touch on the shoulder to comfort her friend.'],['&#127752;','Went out of her way','Farah went out of her way to make sure the old man got home safely.']]},
+      {id:'p4k4',emoji:'&#128104;&#8205;&#128121;',label:'Helping a New Student',phrases:[['&#10024;','A quiet act of courage','Standing up for a friend can be a quiet act of courage.'],['&#127775;','No trouble at all','"It was no trouble at all," she said with a smile.'],['&#128150;','A caring word','Sometimes a caring word is all someone needs.'],['&#128171;','Reached out a hand','Jing Wen reached out a hand to help her friend up.'],['&#127752;','Proud of doing the right thing','Jing Wen felt proud of doing the right thing.']]}
     ],
     compos:{
       p4k1:{title:'&#128104;&#8205;&#128298; Helping a Lost Stranger',introType:'setting',paras:[
@@ -652,10 +666,10 @@ var THEMES_P4 = {
     sntShow:'Mia stood frozen for a moment, her mouth slightly open. Then a wide grin spread across her face and she let out a squeal of delight.',
     sntTip:'&#128161; Show the split second before the character reacts. That small pause makes the happiness feel more real.',
     topics:[
-      {id:'p4h1',emoji:'&#127942;',label:'Winning a Class Competition'},
-      {id:'p4h2',emoji:'&#127908;',label:'Performing on Stage'},
-      {id:'p4h3',emoji:'&#128241;',label:'Receiving Good News'},
-      {id:'p4h4',emoji:'&#127874;',label:'A Surprise Party'}
+      {id:'p4h1',emoji:'&#127942;',label:'Winning a Class Competition',phrases:[['&#10024;','Over the moon','Zi Xuan was over the moon when she heard the news.'],['&#127775;','A wide grin spread across her face','A wide grin spread across her face.'],['&#128150;','Could hardly contain her excitement','Zi Xuan could hardly contain her excitement.'],['&#128171;','Jumped for joy','Zi Xuan jumped for joy at the good news.'],['&#127752;','Eyes lit up','Her eyes lit up the moment she saw it.']]},
+      {id:'p4h2',emoji:'&#127908;',label:'Performing on Stage',phrases:[['&#10024;','A squeal of delight','Xin Yi let out a squeal of delight.'],['&#127775;','Buzzing with excitement','Xin Yi walked home still buzzing with excitement.'],['&#128150;','Could not stop smiling','Xin Yi could not stop smiling all afternoon.'],['&#128171;','Punched the air','Xin Yi punched the air in triumph.'],['&#127752;','On cloud nine','Xin Yi felt as though she were on cloud nine.']]},
+      {id:'p4h3',emoji:'&#128241;',label:'Receiving Good News',phrases:[['&#10024;','Burst into cheers','The whole class burst into cheers.'],['&#127775;','A proud grin','Kai Wen wore a proud grin for the rest of the day.'],['&#128150;','Danced around the room','Kai Wen nearly danced around the room with joy.'],['&#128171;','Beamed from ear to ear','Kai Wen beamed from ear to ear.'],['&#127752;','His heart soared','His heart soared at the good news.']]},
+      {id:'p4h4',emoji:'&#127874;',label:'A Surprise Party',phrases:[['&#10024;','Could hardly believe her luck','Aisha could hardly believe her luck.'],['&#127775;','Felt like hugging everyone in sight','Aisha felt like hugging everyone in sight.'],['&#128150;','A happy blur','The rest of the day passed in a happy blur.'],['&#128171;','Skipped all the way home','Aisha skipped all the way home.'],['&#127752;','The best day ever','Aisha decided it was the best day she had ever had.']]}
     ],
     compos:{
       p4h1:{title:'&#127942; Winning a Class Competition',introType:'setting',paras:[
@@ -718,10 +732,10 @@ var THEMES_P4 = {
     sntShow:'Tom walked back to his seat very slowly, his shoulders drooping. He stared at the table without saying a single word for the rest of the morning.',
     sntTip:'&#128161; Show disappointment through the body, slow footsteps, a lowered head, silence.',
     topics:[
-      {id:'p4s1',emoji:'&#127917;',label:'Losing a Competition'},
-      {id:'p4s2',emoji:'&#9925;',label:'A Sports Event Cancelled'},
-      {id:'p4s3',emoji:'&#128220;',label:'Failing a Test Because of Games'},
-      {id:'p4s4',emoji:'&#128377;',label:'Coming in Last Place'}
+      {id:'p4s1',emoji:'&#127917;',label:'Losing a Competition',phrases:[['&#10024;','Her shoulders drooped','Her shoulders drooped as she walked away.'],['&#127775;','Stared blankly at the floor','Ai Ling stared blankly at the floor.'],['&#128150;','A heavy feeling in her chest','Ai Ling felt a heavy feeling in her chest.'],['&#128171;','Blinked back tears','Ai Ling blinked back tears.'],['&#127752;','Could not find the words','Ai Ling could not find the words to say.']]},
+      {id:'p4s2',emoji:'&#9925;',label:'A Sports Event Cancelled',phrases:[['&#10024;','A lump in his throat','Hafiz felt a lump in his throat.'],['&#127775;','Went quiet for the rest of the day','Hafiz went quiet for the rest of the day.'],['&#128150;','His heart sank','His heart sank the moment he heard the news.'],['&#128171;','Trudged back to his seat','Hafiz trudged back to his seat.'],['&#127752;','Did not want to talk to anyone','Hafiz felt sad and did not want to talk to anyone.']]},
+      {id:'p4s3',emoji:'&#128220;',label:'Failing a Test Because of Games',phrases:[['&#10024;','Stared at the ground','Su Lin stared at the ground, unable to look up.'],['&#127775;','A wave of disappointment','A wave of disappointment washed over Su Lin.'],['&#128150;','Could not hide her disappointment','Su Lin could not hide her disappointment.'],['&#128171;','Wiped her eyes','Su Lin wiped her eyes and took a deep breath.'],['&#127752;','Swallowed hard','Su Lin swallowed hard, trying not to cry.']]},
+      {id:'p4s4',emoji:'&#128377;',label:'Coming in Last Place',phrases:[['&#10024;','A slow, sad sigh','Marcus let out a slow, sad sigh.'],['&#127775;','Could barely look up','Marcus could barely look up at his classmates.'],['&#128150;','Sat quietly by himself','Marcus sat quietly by himself during recess.'],['&#128171;','Did not have the heart to','Marcus did not have the heart to tell anyone.'],['&#127752;','Picked himself back up','Marcus picked himself back up and tried again.']]}
     ],
     compos:{
       p4s1:{title:'&#127917; Losing a Competition',introType:'setting',paras:[
@@ -785,10 +799,10 @@ var THEMES_P4 = {
     sntShow:'Sam stared at his worksheet but could not take in a single word. His hands felt cold, and he kept glancing at the classroom door, dreading the moment he would be found out.',
     sntTip:'&#128161; Show guilt through what the character cannot do. They cannot focus, cannot eat, cannot stop glancing around.',
     topics:[
-      {id:'p4m1',emoji:'&#128245;',label:'Sneaking a Phone Into School'},
-      {id:'p4m2',emoji:'&#127917;',label:'Copying a Friend\'s Homework'},
-      {id:'p4m3',emoji:'&#129695;',label:'Damaging School Property'},
-      {id:'p4m4',emoji:'&#128126;',label:'Blaming a Friend for a Mistake'}
+      {id:'p4m1',emoji:'&#128245;',label:'Sneaking a Phone Into School',phrases:[['&#10024;','Froze on the spot','Rui Feng froze on the spot the moment it happened.'],['&#127775;','A guilty knot in his stomach','Rui Feng felt a guilty knot in his stomach.'],['&#128150;','Hoped nobody would notice','Rui Feng hoped nobody would notice.'],['&#128171;','Could not meet his classmate\'s eyes','Rui Feng could not meet his classmate\'s eyes.'],['&#127752;','A heavy weight of guilt','A heavy weight of guilt sat on his chest.']]},
+      {id:'p4m2',emoji:'&#127917;',label:'Copying a Friend\'s Homework',phrases:[['&#10024;','His face turned red with embarrassment','His face turned red with embarrassment.'],['&#127775;','The truth slipped out','In the end, the truth slipped out.'],['&#128150;','Took a deep breath and confessed','Bryan took a deep breath and confessed.'],['&#128171;','Could not stop thinking about it','Bryan could not stop thinking about it all day.'],['&#127752;','A wave of relief','A wave of relief washed over Bryan once he told the truth.']]},
+      {id:'p4m3',emoji:'&#129695;',label:'Damaging School Property',phrases:[['&#10024;','Kept glancing nervously','Jun Hao kept glancing nervously at the door.'],['&#127775;','Swept it under the sofa','Jun Hao swept the pieces under the sofa without a word.'],['&#128150;','A nervous flutter','Jun Hao felt a nervous flutter in his chest.'],['&#128171;','Owned up to the mistake','Jun Hao finally owned up to the mistake.'],['&#127752;','The guilt was worse than the truth','Jun Hao realised the guilt was worse than the truth.']]},
+      {id:'p4m4',emoji:'&#128126;',label:'Blaming a Friend for a Mistake',phrases:[['&#10024;','Her hands felt cold','Her hands felt cold every time she thought about it.'],['&#127775;','Avoided her classmate all day','Wei Ting avoided her classmate for the rest of the day.'],['&#128150;','A small, guilty voice','A small, guilty voice inside Wei Ting would not stay quiet.'],['&#128171;','Braced herself for trouble','Wei Ting braced herself for trouble.'],['&#127752;','Felt lighter after telling the truth','Wei Ting felt lighter after telling the truth.']]}
     ],
     compos:{
       p4m1:{title:'&#128245; Sneaking a Phone Into School',introType:'setting',paras:[
@@ -853,10 +867,10 @@ var THEMES_P5 = {
     sntShow:'Rachel sank into her chair, her gaze fixed on the desk. Her throat felt tight and she could not bring herself to say a word for the rest of the lesson.',
     sntTip:'&#128161; Show the physical reaction first, then let the reader glimpse a short thought. This deepens the emotion without over-explaining it.',
     topics:[
-      {id:'d1',emoji:'&#127939;',label:'Losing a Competition'},
-      {id:'d2',emoji:'&#128220;',label:'Failing an Exam Because of Games'},
-      {id:'d3',emoji:'&#9992;',label:'A Trip Getting Cancelled'},
-      {id:'d4',emoji:'&#9917;',label:'Not Getting Into a Team'}
+      {id:'d1',emoji:'&#127939;',label:'Losing a Competition',phrases:[['&#10024;','A crushing sense of disappointment','Ryan felt a crushing sense of disappointment.'],['&#127775;','The words would not come','Ryan opened his mouth, but the words would not come.'],['&#128150;','Stared blankly ahead','Ryan stared blankly ahead, barely hearing the announcement.'],['&#128171;','Swallowed the disappointment','Ryan swallowed the disappointment and forced a smile.'],['&#127752;','A hollow feeling','A hollow feeling settled in his chest.']]},
+      {id:'d2',emoji:'&#128220;',label:'Failing an Exam Because of Games',phrases:[['&#10024;','Tried to mask his disappointment','Farhan tried to mask his disappointment in front of his friends.'],['&#127775;','The news hit harder than expected','The news hit Farhan harder than he expected.'],['&#128150;','A familiar ache of defeat','Farhan felt a familiar ache of defeat.'],['&#128171;','Forced a smile','Farhan forced a smile, though his chest felt tight.'],['&#127752;','Could not bring himself to celebrate','Farhan could not bring himself to celebrate with the others.']]},
+      {id:'d3',emoji:'&#9992;',label:'A Trip Getting Cancelled',phrases:[['&#10024;','The disappointment lingered','The disappointment lingered long after the result was announced.'],['&#127775;','A bitter taste of regret','Priya was left with a bitter taste of regret.'],['&#128150;','Picked herself up and tried again','Priya picked herself up and tried again.'],['&#128171;','Refused to let it define herself','Priya refused to let one setback define herself.'],['&#127752;','A quiet determination','A quiet determination replaced her disappointment.']]},
+      {id:'d4',emoji:'&#9917;',label:'Not Getting Into a Team',phrases:[['&#10024;','The sting of missing out','Marcus felt the sting of missing out.'],['&#127775;','Kept a brave face','Marcus kept a brave face in front of his classmates.'],['&#128150;','The weight of unmet expectations','Marcus felt the weight of unmet expectations.'],['&#128171;','Let the disappointment fuel his effort','Marcus let the disappointment fuel his effort instead.'],['&#127752;','Learning to lose gracefully','Marcus was slowly learning to lose gracefully.']]}
     ],
     compos:{
       d1:{title:'&#127939; Losing a Competition',introType:'setting',paras:[
@@ -920,10 +934,10 @@ var THEMES_P5 = {
     sntShow:'Mia stood very still for a moment. Then her hands flew to her face and a wide grin spread across it. She kept looking around the room, not knowing what to say first.',
     sntTip:'&#128161; For a surprise, show the moment just before the character reacts. That pause makes the joy come alive.',
     topics:[
-      {id:'su1',emoji:'&#127942;',label:'An Unexpected Award'},
-      {id:'su2',emoji:'&#128104;&#8205;&#128105;&#8205;&#128103;',label:'A Surprise Visit From a Relative'},
-      {id:'su3',emoji:'&#127941;',label:'Winning Something You Did Not Expect'},
-      {id:'su4',emoji:'&#128241;',label:'Good News From a Parent'}
+      {id:'su1',emoji:'&#127942;',label:'An Unexpected Award',phrases:[['&#10024;','Froze in disbelief','Hui Ling froze in disbelief for a moment.'],['&#127775;','A rush of astonishment','A rush of astonishment washed over Hui Ling.'],['&#128150;','Could scarcely believe her ears','Hui Ling could scarcely believe her ears.'],['&#128171;','Blinked in surprise','Hui Ling blinked in surprise, certain she had misheard.'],['&#127752;','A delighted gasp','Hui Ling let out a delighted gasp.']]},
+      {id:'su2',emoji:'&#128104;&#8205;&#128105;&#8205;&#128103;',label:'A Surprise Visit From a Relative',phrases:[['&#10024;','His eyes widened in disbelief','His eyes widened in disbelief.'],['&#127775;','Left completely speechless','The surprise left Daniel completely speechless.'],['&#128150;','A flutter of anticipation','Daniel felt a flutter of anticipation.'],['&#128171;','Could hardly process it','Daniel could hardly process what he had just heard.'],['&#127752;','Stared in delighted disbelief','Daniel stared in delighted disbelief.']]},
+      {id:'su3',emoji:'&#127941;',label:'Winning Something You Did Not Expect',phrases:[['&#10024;','Caught completely off guard','The moment caught Marcus completely off guard.'],['&#127775;','A grin spread slowly','A grin spread slowly across his face.'],['&#128150;','Stunned into silence','Marcus was stunned into silence.'],['&#128171;','An unexpected thrill','Marcus felt an unexpected thrill of joy.'],['&#127752;','Left beaming from ear to ear','The news left Marcus beaming from ear to ear.']]},
+      {id:'su4',emoji:'&#128241;',label:'Good News From a Parent',phrases:[['&#10024;','A pleasant shock','It came as a pleasant shock to Siti.'],['&#127775;','Took a moment to sink in','It took a moment for the news to sink in.'],['&#128150;','Overwhelmed with happy surprise','Siti felt overwhelmed with happy surprise.'],['&#128171;','The surprise of a lifetime','It felt like the surprise of a lifetime.'],['&#127752;','Could not stop replaying the moment','Siti could not stop replaying the moment in her mind.']]}
     ],
     compos:{
       su1:{title:'&#127942; An Unexpected Award',introType:'setting',paras:[
@@ -987,10 +1001,10 @@ var THEMES_P5 = {
     sntShow:'Tom stared at his hands during the whole lesson. His stomach felt tight and he kept glancing at the teacher, waiting for the moment she would find out.',
     sntTip:'&#128161; Show guilt through what the body does. A tight stomach, looking away, going quiet.',
     topics:[
-      {id:'r1',emoji:'&#128273;',label:'Forgetting the Keys'},
-      {id:'r2',emoji:'&#127942;',label:'Being Given an Important Task'},
-      {id:'r3',emoji:'&#128101;',label:'Looking After a Younger Sibling'},
-      {id:'r4',emoji:'&#128218;',label:'Owning Up to a Mistake'}
+      {id:'r1',emoji:'&#128273;',label:'Forgetting the Keys',phrases:[['&#10024;','Rose to the occasion','Jess rose to the occasion when it mattered most.'],['&#127775;','A weight of responsibility','Jess felt the weight of responsibility settle on her shoulders.'],['&#128150;','Did not shy away from the task','Jess did not shy away from the task.'],['&#128171;','Kept a steady head','Jess kept a steady head despite the panic around her.'],['&#127752;','Took charge without being asked','Jess took charge without being asked.']]},
+      {id:'r2',emoji:'&#127942;',label:'Being Given an Important Task',phrases:[['&#10024;','A moment of quiet resolve','It was a moment of quiet resolve for Sam.'],['&#127775;','Owned his mistake without excuses','Sam owned his mistake without excuses.'],['&#128150;','Did the right thing even when it was hard','Sam did the right thing even when it was hard.'],['&#128171;','Stepped up when it counted','Sam stepped up when it counted.'],['&#127752;','A steady, calm voice','Sam spoke in a steady, calm voice.']]},
+      {id:'r3',emoji:'&#128101;',label:'Looking After a Younger Sibling',phrases:[['&#10024;','Carried the responsibility seriously','Jess carried the responsibility seriously.'],['&#127775;','Determined not to let anyone down','Jess was determined not to let anyone down.'],['&#128150;','Treated it as an important task','It was a small task, but Jess treated it as an important one.'],['&#128171;','Learned from the lapse','Jess learned from the lapse and did better the next time.'],['&#127752;','Trusted with more after that','Jess was trusted with more after that day.']]},
+      {id:'r4',emoji:'&#128218;',label:'Owning Up to a Mistake',phrases:[['&#10024;','Handled it calmly, step by step','Tom handled the situation calmly, step by step.'],['&#127775;','A mature decision','It was a mature decision for someone his age.'],['&#128150;','Did not panic under pressure','Tom did not panic under pressure.'],['&#128171;','Proud of hisself','The moment made Tom proud of himself.'],['&#127752;','A lesson in accountability','It became a lesson in accountability Tom never forgot.']]}
     ],
     compos:{
       r1:{title:'&#128273; Forgetting the Keys',introType:'dialogue',paras:[
@@ -1054,10 +1068,10 @@ var THEMES_P5 = {
     sntShow:'Sam kept his eyes on his worksheet but could not take in a single word. His hands felt cold and he kept glancing at the door, waiting for someone to walk in and find out.',
     sntTip:'&#128161; Show guilt through what the character cannot do. They cannot eat, cannot focus, cannot sleep.',
     topics:[
-      {id:'mis1',emoji:'&#128245;',label:'Being Dishonest to Avoid Trouble'},
-      {id:'mis2',emoji:'&#128126;',label:'A Prank That Went Wrong'},
-      {id:'mis3',emoji:'&#127917;',label:'Using a Friend\'s Things Without Permission'},
-      {id:'mis4',emoji:'&#129680;',label:'An Accident You Hid'}
+      {id:'mis1',emoji:'&#128245;',label:'Being Dishonest to Avoid Trouble',phrases:[['&#10024;','Froze on the spot','Sam froze on the spot the moment it happened.'],['&#127775;','A guilty knot in his stomach','Sam felt a guilty knot in his stomach.'],['&#128150;','Hoped nobody would notice','Sam hoped nobody would notice.'],['&#128171;','Could not meet his classmate\'s eyes','Sam could not meet his classmate\'s eyes.'],['&#127752;','A heavy weight of guilt','A heavy weight of guilt sat on his chest.']]},
+      {id:'mis2',emoji:'&#128126;',label:'A Prank That Went Wrong',phrases:[['&#10024;','His face turned red with embarrassment','His face turned red with embarrassment.'],['&#127775;','The truth slipped out','In the end, the truth slipped out.'],['&#128150;','Took a deep breath and confessed','Ryan took a deep breath and confessed.'],['&#128171;','Could not stop thinking about it','Ryan could not stop thinking about it all day.'],['&#127752;','A wave of relief','A wave of relief washed over Ryan once he told the truth.']]},
+      {id:'mis3',emoji:'&#127917;',label:'Using a Friend\'s Things Without Permission',phrases:[['&#10024;','Kept glancing nervously','Bryan kept glancing nervously at the door.'],['&#127775;','Swept it under the sofa','Bryan swept the pieces under the sofa without a word.'],['&#128150;','A nervous flutter','Bryan felt a nervous flutter in his chest.'],['&#128171;','Owned up to the mistake','Bryan finally owned up to the mistake.'],['&#127752;','The guilt was worse than the truth','Bryan realised the guilt was worse than the truth.']]},
+      {id:'mis4',emoji:'&#129680;',label:'An Accident You Hid',phrases:[['&#10024;','His hands felt cold','His hands felt cold every time he thought about it.'],['&#127775;','Avoided his classmate all day','Ali avoided his classmate for the rest of the day.'],['&#128150;','A small, guilty voice','A small, guilty voice inside Ali would not stay quiet.'],['&#128171;','Braced himself for trouble','Ali braced himself for trouble.'],['&#127752;','Felt lighter after telling the truth','Ali felt lighter after telling the truth.']]}
     ],
     compos:{
       mis1:{title:'&#128245; Being Dishonest to Avoid Trouble',introType:'dialogue',paras:[
@@ -1122,10 +1136,10 @@ var THEMES_P6 = {
     sntShow:'Rachel sank into her chair, her gaze fixed on the desk. Her throat felt tight and she could not bring herself to say a word for the rest of the lesson.',
     sntTip:'&#128161; Show the physical reaction first, then add a short thought. Keep the sentences simple but pick strong, precise words.',
     topics:[
-      {id:'d1',emoji:'&#127939;',label:'Losing a Competition'},
-      {id:'d2',emoji:'&#128220;',label:'Failing an Exam Because of Games'},
-      {id:'d3',emoji:'&#9992;',label:'A Trip Getting Cancelled'},
-      {id:'d4',emoji:'&#9917;',label:'Not Getting Into a Team'}
+      {id:'d1',emoji:'&#127939;',label:'Losing a Competition',phrases:[['&#10024;','A crushing sense of disappointment','Wei Jie felt a crushing sense of disappointment.'],['&#127775;','The words would not come','Wei Jie opened his mouth, but the words would not come.'],['&#128150;','Stared blankly ahead','Wei Jie stared blankly ahead, barely hearing the announcement.'],['&#128171;','Swallowed the disappointment','Wei Jie swallowed the disappointment and forced a smile.'],['&#127752;','A hollow feeling','A hollow feeling settled in his chest.']]},
+      {id:'d2',emoji:'&#128220;',label:'Failing an Exam Because of Games',phrases:[['&#10024;','Tried to mask her disappointment','Xin Yi tried to mask her disappointment in front of her friends.'],['&#127775;','The news hit harder than expected','The news hit Xin Yi harder than she expected.'],['&#128150;','A familiar ache of defeat','Xin Yi felt a familiar ache of defeat.'],['&#128171;','Forced a smile','Xin Yi forced a smile, though her chest felt tight.'],['&#127752;','Could not bring herself to celebrate','Xin Yi could not bring herself to celebrate with the others.']]},
+      {id:'d3',emoji:'&#9992;',label:'A Trip Getting Cancelled',phrases:[['&#10024;','The disappointment lingered','The disappointment lingered long after the result was announced.'],['&#127775;','A bitter taste of regret','Zhi Hao was left with a bitter taste of regret.'],['&#128150;','Picked himself up and tried again','Zhi Hao picked himself up and tried again.'],['&#128171;','Refused to let it define hisself','Zhi Hao refused to let one setback define hisself.'],['&#127752;','A quiet determination','A quiet determination replaced his disappointment.']]},
+      {id:'d4',emoji:'&#9917;',label:'Not Getting Into a Team',phrases:[['&#10024;','The sting of missing out','Darius felt the sting of missing out.'],['&#127775;','Kept a brave face','Darius kept a brave face in front of his classmates.'],['&#128150;','The weight of unmet expectations','Darius felt the weight of unmet expectations.'],['&#128171;','Let the disappointment fuel his effort','Darius let the disappointment fuel his effort instead.'],['&#127752;','Learning to lose gracefully','Darius was slowly learning to lose gracefully.']]}
     ],
     compos:{
       d1:{title:'&#127939; Losing a Competition',introType:'setting',paras:[
@@ -1189,10 +1203,10 @@ var THEMES_P6 = {
     sntShow:'Wei Ting stood rooted to the spot for a long moment. Her hands flew to her face as a wide grin spread across it, and she found herself glancing around the room, unsure of what to say first.',
     sntTip:'&#128161; For a strong surprise, stretch out the pause before the reaction. The longer the pause, the more powerful the emotion feels.',
     topics:[
-      {id:'su1',emoji:'&#127942;',label:'An Unexpected Award'},
-      {id:'su2',emoji:'&#128104;&#8205;&#128105;&#8205;&#128103;',label:'A Surprise Visit From a Relative'},
-      {id:'su3',emoji:'&#127941;',label:'Winning Something You Did Not Expect'},
-      {id:'su4',emoji:'&#128241;',label:'Good News From a Parent'}
+      {id:'su1',emoji:'&#127942;',label:'An Unexpected Award',phrases:[['&#10024;','Froze in disbelief','Mei Xin froze in disbelief for a moment.'],['&#127775;','A rush of astonishment','A rush of astonishment washed over Mei Xin.'],['&#128150;','Could scarcely believe her ears','Mei Xin could scarcely believe her ears.'],['&#128171;','Blinked in surprise','Mei Xin blinked in surprise, certain she had misheard.'],['&#127752;','A delighted gasp','Mei Xin let out a delighted gasp.']]},
+      {id:'su2',emoji:'&#128104;&#8205;&#128105;&#8205;&#128103;',label:'A Surprise Visit From a Relative',phrases:[['&#10024;','His eyes widened in disbelief','His eyes widened in disbelief.'],['&#127775;','Left completely speechless','The surprise left Kai Rui completely speechless.'],['&#128150;','A flutter of anticipation','Kai Rui felt a flutter of anticipation.'],['&#128171;','Could hardly process it','Kai Rui could hardly process what he had just heard.'],['&#127752;','Stared in delighted disbelief','Kai Rui stared in delighted disbelief.']]},
+      {id:'su3',emoji:'&#127941;',label:'Winning Something You Did Not Expect',phrases:[['&#10024;','Caught completely off guard','The moment caught Aisyah completely off guard.'],['&#127775;','A grin spread slowly','A grin spread slowly across her face.'],['&#128150;','Stunned into silence','Aisyah was stunned into silence.'],['&#128171;','An unexpected thrill','Aisyah felt an unexpected thrill of joy.'],['&#127752;','Left beaming from ear to ear','The news left Aisyah beaming from ear to ear.']]},
+      {id:'su4',emoji:'&#128241;',label:'Good News From a Parent',phrases:[['&#10024;','A pleasant shock','It came as a pleasant shock to Jun Wei.'],['&#127775;','Took a moment to sink in','It took a moment for the news to sink in.'],['&#128150;','Overwhelmed with happy surprise','Jun Wei felt overwhelmed with happy surprise.'],['&#128171;','The surprise of a lifetime','It felt like the surprise of a lifetime.'],['&#127752;','Could not stop replaying the moment','Jun Wei could not stop replaying the moment in his mind.']]}
     ],
     compos:{
       su1:{title:'&#127942; An Unexpected Award',introType:'setting',paras:[
@@ -1256,10 +1270,10 @@ var THEMES_P6 = {
     sntShow:'Zhen Wei stared fixedly at his hands throughout the entire lesson, his stomach clenched tight. Every so often his gaze flicked towards the teacher, dreading the moment his lapse would be discovered.',
     sntTip:'&#128161; Show guilt through both physical tension and a short thought of dread. Keep sentences clear and direct.',
     topics:[
-      {id:'r1',emoji:'&#128273;',label:'Forgetting the Keys'},
-      {id:'r2',emoji:'&#127942;',label:'Being Given an Important Task'},
-      {id:'r3',emoji:'&#128101;',label:'Looking After a Younger Sibling'},
-      {id:'r4',emoji:'&#128218;',label:'Owning Up to a Mistake'}
+      {id:'r1',emoji:'&#128273;',label:'Forgetting the Keys',phrases:[['&#10024;','Rose to the occasion','Ryan rose to the occasion when it mattered most.'],['&#127775;','A weight of responsibility','Ryan felt the weight of responsibility settle on his shoulders.'],['&#128150;','Did not shy away from the task','Ryan did not shy away from the task.'],['&#128171;','Kept a steady head','Ryan kept a steady head despite the panic around his.'],['&#127752;','Took charge without being asked','Ryan took charge without being asked.']]},
+      {id:'r2',emoji:'&#127942;',label:'Being Given an Important Task',phrases:[['&#10024;','A moment of quiet resolve','It was a moment of quiet resolve for Farhan.'],['&#127775;','Owned his mistake without excuses','Farhan owned his mistake without excuses.'],['&#128150;','Did the right thing even when it was hard','Farhan did the right thing even when it was hard.'],['&#128171;','Stepped up when it counted','Farhan stepped up when it counted.'],['&#127752;','A steady, calm voice','Farhan spoke in a steady, calm voice.']]},
+      {id:'r3',emoji:'&#128101;',label:'Looking After a Younger Sibling',phrases:[['&#10024;','Carried the responsibility seriously','Shu Fen carried the responsibility seriously.'],['&#127775;','Determined not to let anyone down','Shu Fen was determined not to let anyone down.'],['&#128150;','Treated it as an important task','It was a small task, but Shu Fen treated it as an important one.'],['&#128171;','Learned from the lapse','Shu Fen learned from the lapse and did better the next time.'],['&#127752;','Trusted with more after that','Shu Fen was trusted with more after that day.']]},
+      {id:'r4',emoji:'&#128218;',label:'Owning Up to a Mistake',phrases:[['&#10024;','Handled it calmly, step by step','Chloe handled the situation calmly, step by step.'],['&#127775;','A mature decision','It was a mature decision for someone her age.'],['&#128150;','Did not panic under pressure','Chloe did not panic under pressure.'],['&#128171;','Proud of herself','The moment made Chloe proud of herself.'],['&#127752;','A lesson in accountability','It became a lesson in accountability Chloe never forgot.']]}
     ],
     compos:{
       r1:{title:'&#128273; Forgetting the Keys',introType:'dialogue',paras:[
@@ -1323,10 +1337,10 @@ var THEMES_P6 = {
     sntShow:'Jun Kai kept his eyes trained on his worksheet, but the words blurred together meaninglessly. His hands felt clammy and cold, and every creak of the classroom door sent his pulse racing.',
     sntTip:'&#128161; Combine a physical symptom with a heightened awareness of small sounds. This conveys guilt convincingly with simple, clear sentences.',
     topics:[
-      {id:'mis1',emoji:'&#128245;',label:'Being Dishonest to Avoid Trouble'},
-      {id:'mis2',emoji:'&#128126;',label:'A Prank That Went Wrong'},
-      {id:'mis3',emoji:'&#127917;',label:'Using a Friend\'s Things Without Permission'},
-      {id:'mis4',emoji:'&#129680;',label:'An Accident You Hid'}
+      {id:'mis1',emoji:'&#128245;',label:'Being Dishonest to Avoid Trouble',phrases:[['&#10024;','Froze on the spot','Benjamin froze on the spot the moment it happened.'],['&#127775;','A guilty knot in his stomach','Benjamin felt a guilty knot in his stomach.'],['&#128150;','Hoped nobody would notice','Benjamin hoped nobody would notice.'],['&#128171;','Could not meet his classmate\'s eyes','Benjamin could not meet his classmate\'s eyes.'],['&#127752;','A heavy weight of guilt','A heavy weight of guilt sat on his chest.']]},
+      {id:'mis2',emoji:'&#128126;',label:'A Prank That Went Wrong',phrases:[['&#10024;','His face turned red with embarrassment','His face turned red with embarrassment.'],['&#127775;','The truth slipped out','In the end, the truth slipped out.'],['&#128150;','Took a deep breath and confessed','Marcus took a deep breath and confessed.'],['&#128171;','Could not stop thinking about it','Marcus could not stop thinking about it all day.'],['&#127752;','A wave of relief','A wave of relief washed over Marcus once he told the truth.']]},
+      {id:'mis3',emoji:'&#127917;',label:'Using a Friend\'s Things Without Permission',phrases:[['&#10024;','Kept glancing nervously','Hannah kept glancing nervously at the door.'],['&#127775;','Swept it under the sofa','Hannah swept the pieces under the sofa without a word.'],['&#128150;','A nervous flutter','Hannah felt a nervous flutter in her chest.'],['&#128171;','Owned up to the mistake','Hannah finally owned up to the mistake.'],['&#127752;','The guilt was worse than the truth','Hannah realised the guilt was worse than the truth.']]},
+      {id:'mis4',emoji:'&#129680;',label:'An Accident You Hid',phrases:[['&#10024;','His hands felt cold','His hands felt cold every time he thought about it.'],['&#127775;','Avoided his classmate all day','Timothy avoided his classmate for the rest of the day.'],['&#128150;','A small, guilty voice','A small, guilty voice inside Timothy would not stay quiet.'],['&#128171;','Braced himself for trouble','Timothy braced himself for trouble.'],['&#127752;','Felt lighter after telling the truth','Timothy felt lighter after telling the truth.']]}
     ],
     compos:{
       mis1:{title:'&#128245; Being Dishonest to Avoid Trouble',introType:'dialogue',paras:[
@@ -1525,15 +1539,15 @@ function selectLevel(level) {
 
   document.getElementById('topic-grid').innerHTML = '<div style="font-size:14px;font-weight:700;color:#999;padding:8px;">Pick a theme first</div>';
   document.getElementById('words-chips').innerHTML = '<span style="font-size:14px;font-weight:700;color:#999;">Pick a theme to see helping words.</span>';
-  document.getElementById('phrases-list').innerHTML = '<li style="background:#f5f7ff;border-left:4px solid #ccc;cursor:default;"><span>&#128072;</span> Pick a theme to see helping phrases.</li>';
+  document.getElementById('phrases-list').innerHTML = '<li style="background:#f5f7ff;border-left:4px solid #ccc;cursor:default;"><span>&#128072;</span> Pick a topic to see helping phrases for that story.</li>';
   document.getElementById('conj-grid').innerHTML = '';
-  document.getElementById('snt-level-tip').innerHTML = meta.sntNote;
-  document.getElementById('snt-examples').innerHTML =
-    '<div class="snt-box snt-tell"><div class="snt-label">&#10060; TELL</div><p>She was happy. She felt excited.</p></div>' +
-    '<div class="snt-box snt-show"><div class="snt-label">&#10003; SHOW</div><p>She was over the moon. A wide grin spread across her face and her eyes sparkled with joy.</p></div>';
-  document.getElementById('snt-tip').innerHTML = '&#128161; Pick a theme above to see a Show Not Tell example.';
+  document.getElementById('snt-basic-text').innerHTML = 'She was happy. She felt excited.';
+  document.getElementById('snt-helper-chips').innerHTML = '<span style="font-size:13px;font-weight:700;color:#999;">Pick a theme to see helping words.</span>';
+  document.getElementById('snt-yours-area').value = '';
   document.getElementById('compo-area').innerHTML = '<p style="font-size:14px;font-weight:700;color:#999;text-align:center;padding:20px 0;">Pick a theme and topic above to see a sample composition.</p>';
   document.getElementById('print-note').innerHTML = '&#9999;&#65039; Teacher Ari &middot; ' + meta.printNote;
+  currentTopicId = null;
+  document.getElementById('planner-grid').innerHTML = '<div style="font-size:14px;font-weight:700;color:#999;padding:8px;grid-column:1/-1;">Pick a topic above to start planning.</div>';
 
   document.getElementById('target-conn').value = meta.target.conn;
   document.getElementById('target-dlg').value = meta.target.dlg;
@@ -1598,9 +1612,6 @@ function selectTheme(key) {
     grid.appendChild(b);
   }
 
-  currentTopicId = null;
-  document.getElementById('planner-grid').innerHTML = '<div style="font-size:14px;font-weight:700;color:#999;padding:8px;grid-column:1/-1;">Pick a topic above to start planning.</div>';
-
   var wc = document.getElementById('words-chips');
   wc.innerHTML = '';
   for (i = 0; i < t.words.length; i++) {
@@ -1612,15 +1623,7 @@ function selectTheme(key) {
   }
 
   var pl = document.getElementById('phrases-list');
-  pl.innerHTML = '';
-  for (i = 0; i < t.phrases.length; i++) {
-    var li = document.createElement('li');
-    li.style.background = t.phraseBg;
-    li.style.borderLeft = '4px solid ' + t.phraseBorderLeft;
-    li.innerHTML = '<span>' + t.phrases[i][0] + '</span> ' + t.phrases[i][1];
-    (function(l) { l.onclick = function() { tapRef(l, 'gw'); }; })(li);
-    pl.appendChild(li);
-  }
+  pl.innerHTML = '<li style="background:#f5f7ff;border-left:4px solid #ccc;cursor:default;"><span>&#128072;</span> Pick a topic to see helping phrases for that story.</li>';
 
   var cg = document.getElementById('conj-grid');
   cg.innerHTML = '';
@@ -1629,15 +1632,21 @@ function selectTheme(key) {
   for (i = 0; i < connList.length; i++) {
     var cd = document.createElement('div');
     cd.className = 'conj-card';
-    cd.innerHTML = connList[i][0] + '<small>' + connList[i][1] + '</small>';
+    cd.innerHTML = connList[i][0];
     (function(el) { el.onclick = function() { tapRef(el, 'conn'); }; })(cd);
     cg.appendChild(cd);
   }
 
-  document.getElementById('snt-examples').innerHTML =
-    '<div class="snt-box snt-tell"><div class="snt-label">&#10060; TELL</div><p>' + t.sntTell + '</p></div>' +
-    '<div class="snt-box snt-show"><div class="snt-label">&#10003; SHOW</div><p>' + t.sntShow + '</p></div>';
-  document.getElementById('snt-tip').innerHTML = t.sntTip;
+  document.getElementById('snt-basic-text').innerHTML = t.sntTell;
+  document.getElementById('snt-yours-area').value = '';
+  var hc = document.getElementById('snt-helper-chips');
+  hc.innerHTML = '';
+  for (i = 0; i < t.words.length; i++) {
+    var chip = document.createElement('span');
+    chip.className = 'snt-helper-chip';
+    chip.textContent = t.words[i][1];
+    hc.appendChild(chip);
+  }
 
   var cc = document.getElementById('compo-card');
   cc.style.background = t.comboBg; cc.style.border = '2px solid ' + t.comboBorder;
@@ -1650,6 +1659,8 @@ function selectTopic(id) {
   if (!currentTheme) { return; }
   currentTopicId = id;
   var t = THEMES[currentTheme]; var c = t.compos[id]; var i, btn;
+  var topicDef = null;
+  for (i = 0; i < t.topics.length; i++) { if (t.topics[i].id === id) { topicDef = t.topics[i]; break; } }
   var allBtns = document.getElementsByClassName('topic-btn');
   for (i = 0; i < allBtns.length; i++) {
     allBtns[i].style.background = t.topicBg; allBtns[i].style.borderColor = t.topicBorder;
@@ -1678,6 +1689,21 @@ function selectTopic(id) {
       paras[i].oninput = persistCompoEdits;
     }
   }
+
+  var pl = document.getElementById('phrases-list');
+  pl.innerHTML = '';
+  if (topicDef && topicDef.phrases) {
+    for (i = 0; i < topicDef.phrases.length; i++) {
+      var li = document.createElement('li');
+      li.style.background = t.phraseBg;
+      li.style.borderLeft = '4px solid ' + t.phraseBorderLeft;
+      var ph = topicDef.phrases[i];
+      li.innerHTML = '<span>' + ph[0] + '</span><div><div class="phrase-main">' + ph[1] + '</div><div class="phrase-example">' + ph[2] + '</div></div>';
+      (function(l) { l.onclick = function() { tapRef(l, 'gw'); }; })(li);
+      pl.appendChild(li);
+    }
+  }
+
   renderPlanner();
 }
 
